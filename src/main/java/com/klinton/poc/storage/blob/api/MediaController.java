@@ -12,14 +12,13 @@ public class MediaController {
 
     private final S3StorageService s3StorageService;
 
-    public MediaController(S3StorageService s3StorageService) {
+    public MediaController(final S3StorageService s3StorageService) {
         this.s3StorageService = Objects.requireNonNull(s3StorageService);
     }
 
     @PostMapping("/upload")
     public void uploadMedia(@RequestBody MultipartFile file) throws IOException {
-        final var filePath = "images/" + file.getOriginalFilename();
-        s3StorageService.storeMedia(filePath, file.getBytes());
+        s3StorageService.storeMedia(file);
     }
 
     @GetMapping("/download")
