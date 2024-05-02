@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.2.224</version>
+			<version>2.2.220</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -63,6 +63,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:h2:file:./.h2/dev;MODE=MySQL;DATABASE_TO_LOWER=TRUE</url>
+					<user>root</user>
+					<password>123456</password>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
