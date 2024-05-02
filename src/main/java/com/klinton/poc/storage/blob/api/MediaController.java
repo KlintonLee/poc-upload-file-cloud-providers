@@ -1,10 +1,12 @@
 package com.klinton.poc.storage.blob.api;
 
+import com.klinton.poc.storage.blob.models.ImageMedia;
 import com.klinton.poc.storage.blob.service.S3StorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -19,6 +21,11 @@ public class MediaController {
     @PostMapping("/upload")
     public void uploadMedia(@RequestBody MultipartFile file) throws IOException {
         s3StorageService.storeMedia(file);
+    }
+
+    @GetMapping("/medias")
+    public List<ImageMedia> listImages() {
+        return s3StorageService.listImages();
     }
 
     @GetMapping("/download")

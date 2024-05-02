@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -43,6 +44,10 @@ public class S3StorageService {
         saveMetadata(fileName, filePath);
 
         storeAtCloudProvider(filePath, content);
+    }
+
+    public List<ImageMedia> listImages() {
+        return this.mediaRepository.findAll();
     }
 
     public void downloadMedia(String fileName) throws IOException {
