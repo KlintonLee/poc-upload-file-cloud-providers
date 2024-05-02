@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@RestController
+@RestController("/images")
 public class MediaController {
 
     private final S3StorageService s3StorageService;
@@ -23,12 +23,12 @@ public class MediaController {
         s3StorageService.storeMedia(file);
     }
 
-    @GetMapping("/medias")
+    @GetMapping
     public List<ImageMedia> listImages() {
         return s3StorageService.listImages();
     }
 
-    @GetMapping("/images/download/{id}")
+    @GetMapping("/download/{id}")
     public void downloadMedia(@PathVariable String id) throws IOException {
         s3StorageService.downloadMedia(id);
     }
