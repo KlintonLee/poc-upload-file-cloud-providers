@@ -1,7 +1,7 @@
-package com.klinton.poc.storage.blob.api;
+package com.klinton.poc.store.objects.api;
 
-import com.klinton.poc.storage.blob.models.ImageMedia;
-import com.klinton.poc.storage.blob.service.S3StorageService;
+import com.klinton.poc.store.objects.models.ImageMedia;
+import com.klinton.poc.store.objects.service.S3StorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

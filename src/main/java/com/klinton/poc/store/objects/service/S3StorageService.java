@@ -1,8 +1,8 @@
-package com.klinton.poc.storage.blob.service;
+package com.klinton.poc.store.objects.service;
 
-import com.klinton.poc.storage.blob.exceptions.NotFoundException;
-import com.klinton.poc.storage.blob.models.ImageMedia;
-import com.klinton.poc.storage.blob.persistence.ImageMediaJpaRepository;
+import com.klinton.poc.store.objects.exceptions.NotFoundException;
+import com.klinton.poc.store.objects.models.ImageMedia;
+import com.klinton.poc.store.objects.persistence.ImageMediaJpaRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

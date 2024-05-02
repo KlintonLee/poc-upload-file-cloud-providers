@@ -1,10 +1,10 @@
-package com.klinton.poc.storage.blob;
+package com.klinton.poc.store.objects;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StorageBlobApplicationTests {
+class StoreObjectsApplicationTests {
 
 	@Test
 	void contextLoads() {

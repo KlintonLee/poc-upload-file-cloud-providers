@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.klinton.poc</groupId>
-	<artifactId>Storage-Blob</artifactId>
+	<artifactId>store-objects</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Storage-Blob</name>
+	<name>store-objects</name>
 	<description>Simple POC to save resources at GCP and AWS</description>
 	<properties>
 		<java.version>17</java.version>

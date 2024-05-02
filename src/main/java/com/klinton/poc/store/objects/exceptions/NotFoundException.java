@@ -1,4 +1,4 @@
-package com.klinton.poc.storage.blob.exceptions;
+package com.klinton.poc.store.objects.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

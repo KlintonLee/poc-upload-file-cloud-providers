@@ -1,4 +1,4 @@
-package com.klinton.poc.storage.blob.models;
+package com.klinton.poc.store.objects.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
