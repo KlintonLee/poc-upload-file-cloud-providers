@@ -1,9 +1,7 @@
 package com.klinton.poc.storage.blob.api;
 
 import com.klinton.poc.storage.blob.service.S3StorageService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,5 +20,10 @@ public class MediaController {
     public void uploadMedia(@RequestBody MultipartFile file) throws IOException {
         final var filePath = "images/" + file.getOriginalFilename();
         s3StorageService.storeMedia(filePath, file.getBytes());
+    }
+
+    @GetMapping("/download")
+    public void downloadMedia(@RequestParam String fileName) throws IOException {
+        s3StorageService.downloadMedia(fileName);
     }
 }
