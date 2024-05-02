@@ -28,8 +28,8 @@ public class MediaController {
         return s3StorageService.listImages();
     }
 
-    @GetMapping("/download")
-    public void downloadMedia(@RequestParam String fileName) throws IOException {
-        s3StorageService.downloadMedia(fileName);
+    @GetMapping("/images/download/{id}")
+    public void downloadMedia(@PathVariable String id) throws IOException {
+        s3StorageService.downloadMedia(id);
     }
 }

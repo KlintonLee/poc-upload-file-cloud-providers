@@ -1,5 +1,6 @@
 package com.klinton.poc.storage.blob.service;
 
+import com.klinton.poc.storage.blob.exceptions.NotFoundException;
 import com.klinton.poc.storage.blob.models.ImageMedia;
 import com.klinton.poc.storage.blob.persistence.ImageMediaJpaRepository;
 import org.apache.commons.io.FileUtils;
@@ -50,17 +51,15 @@ public class S3StorageService {
         return this.mediaRepository.findAll();
     }
 
-    public void downloadMedia(String fileName) throws IOException {
-        final var filePath = "images/%s".formatted(fileName);
-        GetObjectRequest objectRequest = GetObjectRequest
-                .builder()
-                .key(filePath)
-                .bucket(BUCKET_NAME)
-                .build();
+    public void downloadMedia(String id) throws IOException {
+        ImageMedia imageMedia = checkImageMetadataExists(id);
 
-        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(objectRequest);
-        byte[] data = objectBytes.asByteArray();
-        FileUtils.writeByteArrayToFile(new File(System.getProperty("user.dir") + "/src/main/resources/static/%s".formatted(fileName)), data);
+        final var filePath = imageMedia.getLocation();
+        byte[] objectBytes = getObjectAtCloudProvider(filePath)
+                .asByteArray();
+
+        final var pathToDownload = System.getProperty("user.dir") + "/assets/%s".formatted(imageMedia.getName());
+        saveFile(objectBytes, pathToDownload);
     }
 
     private void saveMetadata(String fileName, String filePath) {
@@ -77,5 +76,24 @@ public class S3StorageService {
                 .build();
 
         s3Client.putObject(objectRequest, RequestBody.fromBytes(content));
+    }
+
+    private ImageMedia checkImageMetadataExists(String id) {
+        return this.mediaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Image with id: %s was not found".formatted(id)));
+    }
+
+    private ResponseBytes<GetObjectResponse> getObjectAtCloudProvider(String filePath) {
+        GetObjectRequest objectRequest = GetObjectRequest
+                .builder()
+                .key(filePath)
+                .bucket(BUCKET_NAME)
+                .build();
+
+        return s3Client.getObjectAsBytes(objectRequest);
+    }
+
+    private static void saveFile(byte[] objectBytes, String pathToBeSaved) throws IOException {
+        FileUtils.writeByteArrayToFile(new File(pathToBeSaved), objectBytes);
     }
 }
