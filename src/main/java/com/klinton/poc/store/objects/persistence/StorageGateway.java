@@ -4,7 +4,7 @@ public interface StorageGateway {
 
     void storeFile(String filePath, String contentType, byte[] content);
 
-    byte[] getFile(String id);
+    byte[] getFileBytes(String id);
 
     void deleteFile(String id);
 }

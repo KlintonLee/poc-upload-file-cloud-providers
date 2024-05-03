@@ -48,7 +48,7 @@ public class ImageMediaService {
         var imageMedia = checkImageMetadataExists(id);
         final var filePath = imageMedia.getLocation();
         final var provider = CloudProvider.valueOf(imageMedia.getProvider());
-        byte[] objectBytes = storageContext.getStorageGateway(provider).getFile(filePath);
+        byte[] objectBytes = storageContext.getStorageGateway(provider).getFileBytes(filePath);
 
         final var base64Data = Base64.getEncoder().encodeToString(objectBytes);
         return ImageBase64.create(imageMedia.getContentType(), imageMedia.getName(), base64Data);
@@ -58,7 +58,7 @@ public class ImageMediaService {
         ImageMedia imageMedia = checkImageMetadataExists(id);
         final var filePath = imageMedia.getLocation();
         final var provider = CloudProvider.valueOf(imageMedia.getProvider());
-        byte[] objectBytes = storageContext.getStorageGateway(provider).getFile(filePath);
+        byte[] objectBytes = storageContext.getStorageGateway(provider).getFileBytes(filePath);
 
         final var pathToDownload = System.getProperty("user.dir") + "/assets/%s".formatted(imageMedia.getName());
         saveFile(objectBytes, pathToDownload);

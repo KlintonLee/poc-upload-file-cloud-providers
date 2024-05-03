@@ -34,7 +34,7 @@ public class S3StorageGatewayImpl implements StorageGateway {
     }
 
     @Override
-    public byte[] getFile(String filePath) {
+    public byte[] getFileBytes(String filePath) {
         GetObjectRequest objectRequest = GetObjectRequest
                 .builder()
                 .key(filePath)
