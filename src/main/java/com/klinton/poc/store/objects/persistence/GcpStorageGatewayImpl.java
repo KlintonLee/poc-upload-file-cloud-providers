@@ -9,23 +9,22 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
-public class GoogleStorageGatewayImpl implements StorageGateway {
+public class GcpStorageGatewayImpl implements StorageGateway {
 
     private final GoogleStorageProperties storageProperties;
 
     private final Storage storage;
 
-    public GoogleStorageGatewayImpl(final GoogleStorageProperties storageProperties, final Storage storage) {
+    public GcpStorageGatewayImpl(final GoogleStorageProperties storageProperties, final Storage storage) {
         this.storageProperties = Objects.requireNonNull(storageProperties);
         this.storage = Objects.requireNonNull(storage);
     }
 
     @Override
     public void storeFile(String filePath, String contentType, byte[] content) {
-        BlobId id = BlobId
-                .of(storageProperties.getBucket(), Objects.requireNonNull(filePath));
-        BlobInfo blobInfo = BlobInfo
-                .newBuilder(id)
+        var blobId = BlobId.of(storageProperties.getBucket(), Objects.requireNonNull(filePath));
+        var blobInfo = BlobInfo
+                .newBuilder(blobId)
                 .setContentType(contentType)
                 .build();
 
@@ -33,12 +32,14 @@ public class GoogleStorageGatewayImpl implements StorageGateway {
     }
 
     @Override
-    public byte[] getFile(String id) {
-        return new byte[0];
+    public byte[] getFileBytes(String filePath) {
+        var blobId = BlobId.of(storageProperties.getBucket(), Objects.requireNonNull(filePath));
+        return storage.readAllBytes(blobId);
     }
 
     @Override
-    public void deleteFile(String id) {
-
+    public void deleteFile(String filePath) {
+        var blobId = BlobId.of(storageProperties.getBucket(), Objects.requireNonNull(filePath));
+        storage.delete(blobId);
     }
 }

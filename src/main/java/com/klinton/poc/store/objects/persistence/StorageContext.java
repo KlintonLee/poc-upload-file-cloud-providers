@@ -9,9 +9,9 @@ public class StorageContext {
 
     private final S3StorageGatewayImpl s3StorageGateway;
 
-    private final GoogleStorageGatewayImpl googleStorageGateway;
+    private final GcpStorageGatewayImpl googleStorageGateway;
 
-    public StorageContext(final S3StorageGatewayImpl s3StorageGateway, final GoogleStorageGatewayImpl googleStorageGateway) {
+    public StorageContext(final S3StorageGatewayImpl s3StorageGateway, final GcpStorageGatewayImpl googleStorageGateway) {
         this.s3StorageGateway = s3StorageGateway;
         this.googleStorageGateway = googleStorageGateway;
     }
