@@ -27,7 +27,7 @@ import java.util.UUID;
 @Service
 public class S3StorageService {
 
-    @Value("${aws.s3.bucket.name}")
+    @Value("${aws.s3.bucket}")
     private String BUCKET_NAME;
 
     private final S3Client s3Client;
