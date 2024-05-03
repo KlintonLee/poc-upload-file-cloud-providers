@@ -42,9 +42,10 @@ public class S3StorageService {
     public void storeMedia(MultipartFile file) throws IOException {
         final var fileName = file.getOriginalFilename();
         final var filePath = "images/" + file.getOriginalFilename();
+        final var contentType = file.getContentType();
         final var content = file.getBytes();
 
-        saveMetadata(fileName, filePath);
+        saveMetadata(fileName, contentType, filePath);
 
         storeAtCloudProvider(filePath, content);
     }
@@ -83,10 +84,10 @@ public class S3StorageService {
         this.mediaRepository.delete(imageMedia);
     }
 
-    private void saveMetadata(String fileName, String filePath) {
+    private void saveMetadata(String fileName, String contentType, String filePath) {
         final var id = UUID.randomUUID().toString();
 
-        var imageMedia = ImageMedia.create(id, fileName, filePath);
+        var imageMedia = ImageMedia.create(id, fileName, contentType, filePath);
         this.mediaRepository.save(imageMedia);
     }
 
