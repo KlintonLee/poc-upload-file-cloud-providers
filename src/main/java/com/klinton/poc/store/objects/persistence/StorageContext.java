@@ -1,5 +1,6 @@
 package com.klinton.poc.store.objects.persistence;
 
+import com.klinton.poc.store.objects.exceptions.UnprocessableEntity;
 import com.klinton.poc.store.objects.models.CloudProvider;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +19,10 @@ public class StorageContext {
     public StorageGateway getStorageGateway(final CloudProvider provider) {
         if (provider.equals(CloudProvider.AWS)) {
             return s3StorageGateway;
-        } else if (provider.equals(CloudProvider.GOOGLE)) {
+        } else if (provider.equals(CloudProvider.GCP)) {
             return googleStorageGateway;
         } else {
-            throw new IllegalArgumentException("Invalid provider");
+            throw new UnprocessableEntity("Invalid provider");
         }
     }
 
