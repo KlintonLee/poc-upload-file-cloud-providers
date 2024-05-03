@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@RestController("/images")
+@RestController
+@RequestMapping("/images")
 public class MediaController {
 
     private final S3StorageService s3StorageService;
@@ -31,5 +32,10 @@ public class MediaController {
     @GetMapping("/download/{id}")
     public void downloadMedia(@PathVariable String id) throws IOException {
         s3StorageService.downloadMedia(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMedia(@PathVariable String id) {
+        s3StorageService.deleteMedia(id);
     }
 }
