@@ -18,6 +18,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -50,6 +51,15 @@ public class S3StorageService {
 
     public List<ImageMedia> listImages() {
         return this.mediaRepository.findAll();
+    }
+
+    public String getImageBase64(String id) {
+        var imageMedia = checkImageMetadataExists(id);
+        final var filePath = imageMedia.getLocation();
+        byte[] objectBytes = getObjectAtCloudProvider(filePath)
+                .asByteArray();
+
+        return Base64.getEncoder().encodeToString(objectBytes);
     }
 
     public void downloadMedia(String id) throws IOException {

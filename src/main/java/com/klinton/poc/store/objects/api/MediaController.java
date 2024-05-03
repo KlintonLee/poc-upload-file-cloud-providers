@@ -29,6 +29,11 @@ public class MediaController {
         return s3StorageService.listImages();
     }
 
+    @GetMapping("/base64/{id}")
+    public String getImageBase64(@PathVariable String id) {
+        return s3StorageService.getImageBase64(id);
+    }
+
     @GetMapping("/download/{id}")
     public void downloadMedia(@PathVariable String id) throws IOException {
         s3StorageService.downloadMedia(id);
