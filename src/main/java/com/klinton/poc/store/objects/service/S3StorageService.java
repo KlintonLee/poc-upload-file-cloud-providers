@@ -3,6 +3,7 @@ package com.klinton.poc.store.objects.service;
 import com.klinton.poc.store.objects.exceptions.NotFoundException;
 import com.klinton.poc.store.objects.models.ImageMedia;
 import com.klinton.poc.store.objects.persistence.ImageMediaJpaRepository;
+import com.klinton.poc.store.objects.presenters.ImageBase64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,13 +55,14 @@ public class S3StorageService {
         return this.mediaRepository.findAll();
     }
 
-    public String getImageBase64(String id) {
+    public ImageBase64 getImageBase64(String id) {
         var imageMedia = checkImageMetadataExists(id);
         final var filePath = imageMedia.getLocation();
         byte[] objectBytes = getObjectAtCloudProvider(filePath)
                 .asByteArray();
 
-        return Base64.getEncoder().encodeToString(objectBytes);
+        final var base64Data = Base64.getEncoder().encodeToString(objectBytes);
+        return ImageBase64.create(imageMedia.getContentType(), imageMedia.getName(), base64Data);
     }
 
     public void downloadMedia(String id) throws IOException {

@@ -1,6 +1,7 @@
 package com.klinton.poc.store.objects.api;
 
 import com.klinton.poc.store.objects.models.ImageMedia;
+import com.klinton.poc.store.objects.presenters.ImageBase64;
 import com.klinton.poc.store.objects.service.S3StorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,7 @@ public class MediaController {
     }
 
     @GetMapping("/base64/{id}")
-    public String getImageBase64(@PathVariable String id) {
+    public ImageBase64 getImageBase64(@PathVariable String id) {
         return s3StorageService.getImageBase64(id);
     }
 
