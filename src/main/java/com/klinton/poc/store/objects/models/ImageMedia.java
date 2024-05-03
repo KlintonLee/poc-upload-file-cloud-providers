@@ -19,20 +19,24 @@ public class ImageMedia {
     private String contentType;
 
     @Column(nullable = false)
+    private String provider;
+
+    @Column(nullable = false)
     private String location;
 
     public ImageMedia() {
     }
 
-    private ImageMedia(String id, String name, String contentType, String location) {
+    private ImageMedia(String id, String name, String contentType, String provider, String location) {
         this.id = id;
         this.name = name;
         this.contentType = contentType;
+        this.provider = provider;
         this.location = location;
     }
 
-    public static ImageMedia create(final String id, final String name, final String contentType, final String location) {
-        return new ImageMedia(id, name, contentType, location);
+    public static ImageMedia create(final String id, final String name, final String contentType, final String provider, final String location) {
+        return new ImageMedia(id, name, contentType, provider, location);
     }
 
     public String getId() {
@@ -45,6 +49,10 @@ public class ImageMedia {
 
     public String getContentType() {
         return contentType;
+    }
+
+    public String getProvider() {
+        return provider;
     }
 
     public String getLocation() {
