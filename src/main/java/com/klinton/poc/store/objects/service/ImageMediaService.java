@@ -4,8 +4,7 @@ import com.klinton.poc.store.objects.exceptions.NotFoundException;
 import com.klinton.poc.store.objects.models.CloudProvider;
 import com.klinton.poc.store.objects.models.ImageMedia;
 import com.klinton.poc.store.objects.persistence.ImageMediaJpaRepository;
-import com.klinton.poc.store.objects.persistence.S3StorageGatewayImpl;
-import com.klinton.poc.store.objects.persistence.StorageGateway;
+import com.klinton.poc.store.objects.persistence.StorageContext;
 import com.klinton.poc.store.objects.presenters.ImageBase64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
@@ -23,17 +22,11 @@ public class ImageMediaService {
 
     private final ImageMediaJpaRepository mediaRepository;
 
-    private final StorageGateway s3StorageGateway;
+    private final StorageContext storageContext;
 
-    private final StorageGateway googleStorageGateway;
-
-    public ImageMediaService(
-            final ImageMediaJpaRepository mediaRepository,
-            final S3StorageGatewayImpl storageGateway,
-            final StorageGateway googleStorageGateway) {
+    public ImageMediaService(final ImageMediaJpaRepository mediaRepository, final StorageContext storageContext) {
         this.mediaRepository = Objects.requireNonNull(mediaRepository);
-        this.s3StorageGateway = Objects.requireNonNull(storageGateway);
-        this.googleStorageGateway = Objects.requireNonNull(googleStorageGateway);
+        this.storageContext = storageContext;
     }
 
     public void save(MultipartFile file, CloudProvider providerEnum) throws IOException {
@@ -44,11 +37,7 @@ public class ImageMediaService {
 
         saveMetadata(fileName, contentType, filePath, providerEnum);
 
-        if (providerEnum == CloudProvider.AWS) {
-            s3StorageGateway.storeFile(filePath, contentType, content);
-        } else if (providerEnum == CloudProvider.GOOGLE) {
-            googleStorageGateway.storeFile(filePath, contentType, content);
-        }
+        storageContext.getStorageGateway(providerEnum).storeFile(filePath, contentType, content);
     }
 
     public List<ImageMedia> list() {
@@ -59,13 +48,7 @@ public class ImageMediaService {
         var imageMedia = checkImageMetadataExists(id);
         final var filePath = imageMedia.getLocation();
         final var provider = CloudProvider.valueOf(imageMedia.getProvider());
-        byte[] objectBytes;
-
-        if (provider == CloudProvider.AWS) {
-            objectBytes = s3StorageGateway.getFile(filePath);
-        } else {
-            objectBytes = googleStorageGateway.getFile(filePath);
-        }
+        byte[] objectBytes = storageContext.getStorageGateway(provider).getFile(filePath);
 
         final var base64Data = Base64.getEncoder().encodeToString(objectBytes);
         return ImageBase64.create(imageMedia.getContentType(), imageMedia.getName(), base64Data);
@@ -75,13 +58,7 @@ public class ImageMediaService {
         ImageMedia imageMedia = checkImageMetadataExists(id);
         final var filePath = imageMedia.getLocation();
         final var provider = CloudProvider.valueOf(imageMedia.getProvider());
-        byte[] objectBytes;
-
-        if (provider == CloudProvider.AWS) {
-            objectBytes = s3StorageGateway.getFile(filePath);
-        } else {
-            objectBytes = googleStorageGateway.getFile(filePath);
-        }
+        byte[] objectBytes = storageContext.getStorageGateway(provider).getFile(filePath);
 
         final var pathToDownload = System.getProperty("user.dir") + "/assets/%s".formatted(imageMedia.getName());
         saveFile(objectBytes, pathToDownload);
@@ -92,11 +69,7 @@ public class ImageMediaService {
         final var filePath = imageMedia.getLocation();
         final var provider = CloudProvider.valueOf(imageMedia.getProvider());
 
-        if (provider == CloudProvider.AWS) {
-            s3StorageGateway.deleteFile(filePath);
-        } else {
-            googleStorageGateway.getFile(filePath);
-        }
+        storageContext.getStorageGateway(provider).deleteFile(filePath);
 
         this.mediaRepository.delete(imageMedia);
     }
