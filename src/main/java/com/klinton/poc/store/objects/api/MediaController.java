@@ -1,5 +1,6 @@
 package com.klinton.poc.store.objects.api;
 
+import com.klinton.poc.store.objects.exceptions.UnprocessableEntity;
 import com.klinton.poc.store.objects.models.CloudProvider;
 import com.klinton.poc.store.objects.models.ImageMedia;
 import com.klinton.poc.store.objects.presenters.ImageBase64;
@@ -22,8 +23,12 @@ public class MediaController {
     }
 
     @PostMapping("/upload")
-    public void uploadMedia(@RequestBody MultipartFile file) throws IOException {
-        mediaService.save(file, CloudProvider.AWS);
+    public void uploadMedia(
+            @RequestBody MultipartFile file,
+            @RequestParam(defaultValue = "gcp") String provider
+    ) throws IOException {
+        var providerEnum = getCloudProvider(provider);
+        mediaService.save(file, providerEnum);
     }
 
     @GetMapping
@@ -44,5 +49,10 @@ public class MediaController {
     @DeleteMapping("/{id}")
     public void deleteMedia(@PathVariable String id) {
         mediaService.delete(id);
+    }
+
+    private static CloudProvider getCloudProvider(String providerName) {
+        return CloudProvider.findByProvider(providerName)
+                .orElseThrow(() -> new UnprocessableEntity("Invalid provider, make sure to choose between aws and gcp"));
     }
 }
