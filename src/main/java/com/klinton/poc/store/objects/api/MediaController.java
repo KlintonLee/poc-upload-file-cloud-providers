@@ -1,8 +1,9 @@
 package com.klinton.poc.store.objects.api;
 
+import com.klinton.poc.store.objects.models.CloudProvider;
 import com.klinton.poc.store.objects.models.ImageMedia;
 import com.klinton.poc.store.objects.presenters.ImageBase64;
-import com.klinton.poc.store.objects.service.S3StorageService;
+import com.klinton.poc.store.objects.service.ImageMediaService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,34 +15,34 @@ import java.util.Objects;
 @RequestMapping("/images")
 public class MediaController {
 
-    private final S3StorageService s3StorageService;
+    private final ImageMediaService mediaService;
 
-    public MediaController(final S3StorageService s3StorageService) {
-        this.s3StorageService = Objects.requireNonNull(s3StorageService);
+    public MediaController(final ImageMediaService mediaService) {
+        this.mediaService = Objects.requireNonNull(mediaService);
     }
 
     @PostMapping("/upload")
     public void uploadMedia(@RequestBody MultipartFile file) throws IOException {
-        s3StorageService.storeMedia(file);
+        mediaService.save(file, CloudProvider.AWS);
     }
 
     @GetMapping
     public List<ImageMedia> listImages() {
-        return s3StorageService.listImages();
+        return mediaService.list();
     }
 
     @GetMapping("/base64/{id}")
     public ImageBase64 getImageBase64(@PathVariable String id) {
-        return s3StorageService.getImageBase64(id);
+        return mediaService.getBase64(id);
     }
 
     @GetMapping("/download/{id}")
     public void downloadMedia(@PathVariable String id) throws IOException {
-        s3StorageService.downloadMedia(id);
+        mediaService.downloadMedia(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteMedia(@PathVariable String id) {
-        s3StorageService.deleteMedia(id);
+        mediaService.delete(id);
     }
 }
