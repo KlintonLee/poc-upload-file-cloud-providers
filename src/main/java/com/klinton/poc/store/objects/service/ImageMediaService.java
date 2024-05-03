@@ -8,6 +8,7 @@ import com.klinton.poc.store.objects.persistence.S3StorageGatewayImpl;
 import com.klinton.poc.store.objects.persistence.StorageGateway;
 import com.klinton.poc.store.objects.presenters.ImageBase64;
 import org.apache.commons.io.FileUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Service
 public class ImageMediaService {
 
     private final ImageMediaJpaRepository mediaRepository;
