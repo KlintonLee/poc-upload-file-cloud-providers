@@ -1,5 +1,8 @@
 # POC - Store medias at Cloud Providers
 
+## Description
+
+
 ## References
 https://aws.amazon.com/cli/
 
@@ -9,6 +12,7 @@ https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-s3-obje
 
 https://cloud.google.com/storage/docs/downloading-objects-into-memory?hl=pt-BR#storage-download-object-java
 
+https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration-apache.html
 
 ## Following steps
 https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html

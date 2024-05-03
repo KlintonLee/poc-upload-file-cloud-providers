@@ -13,19 +13,26 @@ import org.threeten.bp.Duration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 @Configuration
 public class GoogleStorageConfig {
 
-    private final GoogleStorageProperties props;
+    private final HttpProperties httpProps;
 
-    public GoogleStorageConfig(GoogleStorageProperties googleStorageProperties) {
-        this.props = googleStorageProperties;
+    private final GoogleStorageProperties gcpProps;
+
+    public GoogleStorageConfig(
+            final HttpProperties httpProps,
+            final GoogleStorageProperties googleStorageProperties
+    ) {
+        this.httpProps = Objects.requireNonNull(httpProps);
+        this.gcpProps = Objects.requireNonNull(googleStorageProperties);
     }
 
     @Bean
     public Credentials credentials() throws IOException {
-        final var jsonContent = Base64.decodeBase64(props.getCredentials());
+        final var jsonContent = Base64.decodeBase64(gcpProps.getCredentials());
 
         return GoogleCredentials.fromStream(new ByteArrayInputStream(jsonContent));
     }
@@ -35,15 +42,15 @@ public class GoogleStorageConfig {
             final Credentials credentials
     ) {
         final var transportOptions = HttpTransportOptions.newBuilder()
-                .setConnectTimeout(props.getConnectTimeout())
-                .setReadTimeout(props.getReadTimeout())
+                .setConnectTimeout(httpProps.getConnectTimeout())
+                .setReadTimeout(httpProps.getReadTimeout())
                 .build();
 
         final var retrySettings = RetrySettings.newBuilder()
-                .setInitialRetryDelay(Duration.ofMillis(props.getRetryDelay()))
-                .setMaxAttempts(props.getRetryMaxAttempts())
-                .setMaxRetryDelay(Duration.ofMillis(props.getRetryMaxDelay()))
-                .setRetryDelayMultiplier(props.getRetryMultiplier())
+                .setInitialRetryDelay(Duration.ofMillis(httpProps.getRetryDelay()))
+                .setMaxAttempts(httpProps.getRetryMaxAttempts())
+                .setMaxRetryDelay(Duration.ofMillis(httpProps.getRetryMaxDelay()))
+                .setRetryDelayMultiplier(httpProps.getRetryMultiplier())
                 .build();
 
         final var options = StorageOptions.newBuilder()

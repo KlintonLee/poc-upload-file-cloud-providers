@@ -18,29 +18,11 @@ public class GoogleStorageProperties implements InitializingBean {
 
     private String bucket;
 
-    private int connectTimeout;
-
-    private int readTimeout;
-
-    private int retryDelay;
-
-    private int retryMaxDelay;
-
-    private int retryMaxAttempts;
-
-    private double retryMultiplier;
-
     @Override
     public String toString() {
-        return "GoogleStorageConfig{" +
+        return "GoogleStorageProperties{" +
                 ", projectId='" + projectId + '\'' +
                 ", bucket='" + bucket + '\'' +
-                ", connectTimeout=" + connectTimeout +
-                ", readTimeout=" + readTimeout +
-                ", retryDelay=" + retryDelay +
-                ", retryMaxDelay=" + retryMaxDelay +
-                ", retryMaxAttempts=" + retryMaxAttempts +
-                ", retryMultiplier=" + retryMultiplier +
                 '}';
     }
 
@@ -61,30 +43,6 @@ public class GoogleStorageProperties implements InitializingBean {
         return bucket;
     }
 
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public int getReadTimeout() {
-        return readTimeout;
-    }
-
-    public int getRetryDelay() {
-        return retryDelay;
-    }
-
-    public int getRetryMaxDelay() {
-        return retryMaxDelay;
-    }
-
-    public int getRetryMaxAttempts() {
-        return retryMaxAttempts;
-    }
-
-    public double getRetryMultiplier() {
-        return retryMultiplier;
-    }
-
     public void setCredentials(String credentials) {
         this.credentials = credentials;
     }
@@ -95,29 +53,5 @@ public class GoogleStorageProperties implements InitializingBean {
 
     public void setBucket(String bucket) {
         this.bucket = bucket;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public void setRetryDelay(int retryDelay) {
-        this.retryDelay = retryDelay;
-    }
-
-    public void setRetryMaxDelay(int retryMaxDelay) {
-        this.retryMaxDelay = retryMaxDelay;
-    }
-
-    public void setRetryMaxAttempts(int retryMaxAttempts) {
-        this.retryMaxAttempts = retryMaxAttempts;
-    }
-
-    public void setRetryMultiplier(double retryMultiplier) {
-        this.retryMultiplier = retryMultiplier;
     }
 }
